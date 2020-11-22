@@ -1,12 +1,15 @@
 import './App.css';
 import AppLayout from './AppLayout';
 import AppBar from './AppBar';
+import AppProvider from './AppProvider';
 
 const App = () => {
   return (
     <AppLayout>
-      <AppBar />
-      Crypto Dashboard
+      <AppProvider>
+        <AppBar />
+        Crypto Dashboard
+      </AppProvider>
     </AppLayout>
   );
 };

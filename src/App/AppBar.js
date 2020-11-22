@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
+import { AppContext } from './AppProvider';
 
 const Logo = styled.div`
   font-size: 1.5em;
@@ -25,9 +26,17 @@ const ControlButtonElem = styled.div`
     `}
 `;
 
-const ControlButton = ({ name, active }) => {
+const ControlButton = ({ name }) => {
+  const { state, dispatch } = useContext(AppContext);
+
+  console.log(state);
   return (
-    <ControlButtonElem active={active}>{toProperCase(name)}</ControlButtonElem>
+    <ControlButtonElem
+      active={state.page === name}
+      onClick={() => dispatch({ type: 'page', payload: name })}
+    >
+      {toProperCase(name)}
+    </ControlButtonElem>
   );
 };
 
