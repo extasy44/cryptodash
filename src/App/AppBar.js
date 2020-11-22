@@ -29,7 +29,6 @@ const ControlButtonElem = styled.div`
 const ControlButton = ({ name }) => {
   const { state, dispatch } = useContext(AppContext);
 
-  console.log(state);
   return (
     <ControlButtonElem
       active={state.page === name}
