@@ -1,22 +1,31 @@
 import React, { useContext } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { AppContext } from '../App/AppProvider';
-import { SelectableTile } from '../Shared/Tiles';
+import CoinTile from './CoinTile';
 
 export const CoinGridStyled = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 15px;
+  margin-top: 20px;
 `;
+
+const getCoinsToDisplay = (coinList) => {
+  return Object.keys(coinList).slice(0, 100);
+};
 
 const CoinGrid = () => {
   const { state } = useContext(AppContext);
   const { coinList } = state;
-  console.log(coinList);
+
   return (
     <CoinGridStyled>
-      {Object.keys(coinList).map((coinKey, index) => {
-        return <SelectableTile key={index}>{coinKey}</SelectableTile>;
+      {getCoinsToDisplay(coinList).map((coinKey, index) => {
+        return (
+          <CoinTile coinKey={coinKey} key={index}>
+            {coinKey}
+          </CoinTile>
+        );
       })}
     </CoinGridStyled>
   );
