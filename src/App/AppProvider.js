@@ -61,7 +61,7 @@ const AppProvider = ({ children }) => {
   const fetchCoins = async () => {
     let coinList = (await cc.coinList()).Data;
 
-    dispatch({ type: 'coinList', payload: { coinList } });
+    dispatch({ type: 'coinList', payload: coinList });
   };
 
   useEffect(() => {
