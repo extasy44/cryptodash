@@ -28,14 +28,11 @@ const AppProvider = ({ children }) => {
 
       case 'coinList':
         return { ...state, coinList: action.payload };
+
       default:
         return state;
     }
   };
-
-  useEffect(() => {
-    fetchCoins();
-  }, []);
 
   const [state, dispatch] = useReducer(mainReducer, initialState);
 
@@ -62,10 +59,14 @@ const AppProvider = ({ children }) => {
   };
 
   const fetchCoins = async () => {
-    let coinList = await cc.coinList().data;
+    let coinList = (await cc.coinList()).Data;
 
     dispatch({ type: 'coinList', payload: { coinList } });
   };
+
+  useEffect(() => {
+    fetchCoins();
+  }, []);
 
   return (
     <AppContext.Provider
