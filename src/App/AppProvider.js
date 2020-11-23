@@ -1,31 +1,41 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
+import cc from 'cryptocompare';
 
 export const AppContext = createContext();
 
-const mainReducer = (state, action) => {
-  switch (action.type) {
-    case 'page':
-      return {
-        ...state,
-        page: action.payload,
-      };
-
-    case 'firstVisit':
-      return {
-        ...state,
-        firstVisit: action.payload,
-      };
-
-    default:
-      return state;
-  }
-};
-
 const AppProvider = ({ children }) => {
+  cc.setApiKey(process.env.REACT_APP_CRYPTO_API);
+
   const initialState = {
     page: 'dashboard',
     firstVisit: true,
+    coinList: {},
   };
+
+  const mainReducer = (state, action) => {
+    switch (action.type) {
+      case 'page':
+        return {
+          ...state,
+          page: action.payload,
+        };
+
+      case 'firstVisit':
+        return {
+          ...state,
+          firstVisit: action.payload,
+        };
+
+      case 'coinList':
+        return { ...state, coinList: action.payload };
+      default:
+        return state;
+    }
+  };
+
+  useEffect(() => {
+    fetchCoins();
+  }, []);
 
   const [state, dispatch] = useReducer(mainReducer, initialState);
 
@@ -49,6 +59,12 @@ const AppProvider = ({ children }) => {
         test: 'hello',
       })
     );
+  };
+
+  const fetchCoins = async () => {
+    let coinList = await cc.coinList().data;
+
+    dispatch({ type: 'coinList', payload: { coinList } });
   };
 
   return (
