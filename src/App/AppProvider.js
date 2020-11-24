@@ -112,6 +112,7 @@ const AppProvider = ({ children }) => {
     savedSettings();
     fetchCoins();
     fetchPrices();
+    // eslint-disable-next-line
   }, []);
 
   return (
