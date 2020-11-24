@@ -12,7 +12,7 @@ const AppProvider = ({ children }) => {
     page: 'dashboard',
     firstVisit: true,
     coinList: [],
-    favorites: ['BTC', 'ETH', 'XMR', 'DOGE'],
+    favorites: ['BTC', 'ETH', 'XMR', 'DOGE', 'ORB'],
     currentFavorite: [],
     filteredCoins: [],
     prices: [],
@@ -58,16 +58,29 @@ const AppProvider = ({ children }) => {
   };
 
   const confirmFavorites = () => {
+    let currentFavorite = state.favorites[0];
     dispatch({ type: 'firstVisit', payload: false });
     dispatch({ type: 'page', payload: 'dashboard' });
-
+    dispatch({ type: 'currentFavorite', payload: currentFavorite });
     localStorage.setItem(
       'cryptoDash',
       JSON.stringify({
         favorites: state.favorites,
+        currentFavorite: state.currentFavorite,
       })
     );
     fetchPrices();
+  };
+
+  const setCurrentFavorite = (sym) => {
+    dispatch({ type: 'currentFavorite', payload: sym });
+    localStorage.setItem(
+      'cryptoDash',
+      JSON.stringify({
+        favorites: state.favorites,
+        currentFavorite: state.currentFavorite,
+      })
+    );
   };
 
   const fetchCoins = async () => {
@@ -98,6 +111,7 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     savedSettings();
     fetchCoins();
+    fetchPrices();
   }, []);
 
   return (
@@ -111,6 +125,7 @@ const AppProvider = ({ children }) => {
         removeCoin,
         isInFavorites,
         setFilteredCoins,
+        setCurrentFavorite,
       }}
     >
       {children}

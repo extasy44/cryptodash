@@ -13,7 +13,7 @@ const PriceGridStyled = styled.div`
 const PriceGrid = () => {
   const { state } = useContext(AppContext);
   let { prices } = state;
-  console.log(prices);
+
   return (
     <PriceGridStyled>
       {prices.map((price, index) => (
