@@ -15,6 +15,7 @@ const AppProvider = ({ children }) => {
     favorites: ['BTC', 'ETH', 'XMR', 'DOGE'],
     currentFavorite: [],
     filteredCoins: [],
+    prices: [],
   };
 
   const mainReducer = (state, action) => {
@@ -36,15 +37,37 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  const fetchPrices = async () => {
+    if (state.firstVisit) return;
+    let prices = await getPrices();
+
+    dispatch({ type: 'prices', payload: [...prices] });
+  };
+
+  const getPrices = async () => {
+    let returnData = [];
+    for (let i = 0; i < state.favorites.length; i++) {
+      try {
+        let priceData = await cc.priceFull(state.favorites[i], 'AUD');
+        returnData.push(priceData);
+      } catch (e) {
+        console.warn('Fetch price error: ', e.message);
+      }
+    }
+    return returnData;
+  };
+
   const confirmFavorites = () => {
     dispatch({ type: 'firstVisit', payload: false });
     dispatch({ type: 'page', payload: 'dashboard' });
+
     localStorage.setItem(
       'cryptoDash',
       JSON.stringify({
         favorites: state.favorites,
       })
     );
+    fetchPrices();
   };
 
   const fetchCoins = async () => {

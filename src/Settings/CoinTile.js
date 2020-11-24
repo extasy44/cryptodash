@@ -31,8 +31,8 @@ const CoinTile = ({ coinKey, topSection }) => {
     >
       <CoinHeaderGrid
         topSection={topSection}
-        name={coin.CoinName}
-        symbol={coin.Symbol}
+        name={coin?.CoinName}
+        symbol={coin?.Symbol}
       />
       <CoinImage coin={coin} />
     </TileClass>
