@@ -3,8 +3,6 @@ import { AppContext } from '../App/AppProvider';
 
 const Page = ({ name, children }) => {
   const { state } = useContext(AppContext);
-
-  console.log(state);
   if (state.page !== name) {
     return null;
   }

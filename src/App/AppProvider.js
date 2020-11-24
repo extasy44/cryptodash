@@ -14,34 +14,11 @@ const AppProvider = ({ children }) => {
     coinList: [],
     favorites: ['BTC', 'ETH', 'XMR', 'DOGE'],
     currentFavorite: [],
+    filteredCoins: [],
   };
 
   const mainReducer = (state, action) => {
-    switch (action.type) {
-      case 'page':
-        return {
-          ...state,
-          page: action.payload,
-        };
-
-      case 'firstVisit':
-        return {
-          ...state,
-          firstVisit: action.payload,
-        };
-
-      case 'coinList':
-        return { ...state, coinList: action.payload };
-
-      case 'favorites':
-        return { ...state, favorites: action.payload };
-
-      case 'currentFavorite':
-        return { ...state, currentFavorite: action.payload };
-
-      default:
-        return state;
-    }
+    return { ...state, [action.type]: action.payload };
   };
 
   const [state, dispatch] = useReducer(mainReducer, initialState);
@@ -91,6 +68,10 @@ const AppProvider = ({ children }) => {
     dispatch({ type: 'favorites', payload: _.pull(favorites, key) });
   };
 
+  const setFilteredCoins = (filteredCoins) => {
+    dispatch({ type: 'filteredCoins', payload: filteredCoins });
+  };
+
   useEffect(() => {
     savedSettings();
     fetchCoins();
@@ -106,6 +87,7 @@ const AppProvider = ({ children }) => {
         addCoin,
         removeCoin,
         isInFavorites,
+        setFilteredCoins,
       }}
     >
       {children}
