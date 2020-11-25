@@ -46,6 +46,7 @@ const AppProvider = ({ children }) => {
 
   const getPrices = async () => {
     let returnData = [];
+    console.log(state.favorites);
     for (let i = 0; i < state.favorites.length; i++) {
       try {
         let priceData = await cc.priceFull(state.favorites[i], 'AUD');
@@ -54,6 +55,7 @@ const AppProvider = ({ children }) => {
         console.warn('Fetch price error: ', e.message);
       }
     }
+    console.log(returnData);
     return returnData;
   };
 
