@@ -3,7 +3,7 @@ import { AppContext } from '../App/AppProvider';
 
 const Content = ({ children }) => {
   const { state } = useContext(AppContext);
-  const { coinList, prices, firstVisit } = state;
+  const { coinList, prices } = state;
   if (!coinList) {
     return <div>Loading Coins ... </div>;
   }

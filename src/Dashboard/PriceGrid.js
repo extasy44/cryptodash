@@ -12,11 +12,10 @@ const PriceGridStyled = styled.div`
 
 const PriceGrid = () => {
   const { state } = useContext(AppContext);
-  let { prices } = state;
 
   return (
     <PriceGridStyled>
-      {prices.map((price, index) => (
+      {state.prices.map((price, index) => (
         <PriceTile key={`priceTile-${index}`} index={index} price={price} />
       ))}
     </PriceGridStyled>

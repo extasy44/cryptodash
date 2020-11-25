@@ -17,8 +17,8 @@ const AppProvider = ({ children }) => {
     favorites: ['BTC', 'ETH', 'XMR', 'DOGE', 'ORB'],
     currentFavorite: [],
     filteredCoins: [],
-    prices: null,
-    historical: null,
+    prices: [],
+    historical: [],
     timeInterval: 'months',
   };
 
@@ -106,8 +106,6 @@ const AppProvider = ({ children }) => {
     dispatch({ type: 'firstVisit', payload: false });
     dispatch({ type: 'page', payload: 'dashboard' });
     dispatch({ type: 'currentFavorite', payload: currentFavorite });
-    dispatch({ type: 'prices', payload: null });
-    dispatch({ type: 'historical', payload: null });
     localStorage.setItem(
       'cryptoDash',
       JSON.stringify({
