@@ -1,9 +1,11 @@
 import React, { createContext, useReducer, useEffect } from 'react';
 import cc from 'cryptocompare';
 import _ from 'lodash';
+import moment from 'moment';
 
 export const AppContext = createContext();
 const MAX_FAVORITES = 10;
+const TIME_UNITS = 10;
 
 const AppProvider = ({ children }) => {
   cc.setApiKey(process.env.REACT_APP_CRYPTO_API);
@@ -15,7 +17,9 @@ const AppProvider = ({ children }) => {
     favorites: ['BTC', 'ETH', 'XMR', 'DOGE', 'ORB'],
     currentFavorite: [],
     filteredCoins: [],
-    prices: [],
+    prices: null,
+    historical: null,
+    timeInterval: 'months',
   };
 
   const mainReducer = (state, action) => {
@@ -44,6 +48,44 @@ const AppProvider = ({ children }) => {
     dispatch({ type: 'prices', payload: [...prices] });
   };
 
+  const fetchHistorical = async () => {
+    if (state.firstVisit) return;
+    let results = await historical();
+
+    let hisoricalResults = [
+      {
+        name: state.currentFavorite,
+        data: results.map((ticker, index) => [
+          moment()
+            .subtract({ [state.timeInterval]: TIME_UNITS - index })
+            .valueOf(),
+          ticker.AUD,
+        ]),
+      },
+    ];
+
+    console.log(hisoricalResults);
+    dispatch({ type: 'histrorical', payload: hisoricalResults });
+  };
+
+  const historical = () => {
+    let promises = [];
+    for (let units = TIME_UNITS; units > 0; units--) {
+      promises.push(
+        cc.priceHistorical(
+          state.currentFavorite,
+          ['AUD'],
+          moment()
+            .subtract({ [state.timeInterval]: units })
+            .toDate()
+        )
+      );
+    }
+    console.log(promises);
+
+    return Promise.all(promises);
+  };
+
   const getPrices = async () => {
     let returnData = [];
     console.log(state.favorites);
@@ -64,6 +106,8 @@ const AppProvider = ({ children }) => {
     dispatch({ type: 'firstVisit', payload: false });
     dispatch({ type: 'page', payload: 'dashboard' });
     dispatch({ type: 'currentFavorite', payload: currentFavorite });
+    dispatch({ type: 'prices', payload: null });
+    dispatch({ type: 'historical', payload: null });
     localStorage.setItem(
       'cryptoDash',
       JSON.stringify({
@@ -72,10 +116,13 @@ const AppProvider = ({ children }) => {
       })
     );
     fetchPrices();
+    fetchHistorical();
   };
 
   const setCurrentFavorite = (sym) => {
     dispatch({ type: 'currentFavorite', payload: sym });
+    dispatch({ type: 'historical', payload: null });
+    fetchHistorical();
     localStorage.setItem(
       'cryptoDash',
       JSON.stringify({
@@ -129,6 +176,7 @@ const AppProvider = ({ children }) => {
         isInFavorites,
         setFilteredCoins,
         setCurrentFavorite,
+        fetchHistorical,
       }}
     >
       {children}

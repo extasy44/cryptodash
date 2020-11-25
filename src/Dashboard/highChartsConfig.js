@@ -1,4 +1,5 @@
 const highChartsConfig = (historical) => {
+  console.log(historical);
   return {
     title: {
       text: '',
@@ -23,7 +24,7 @@ const highChartsConfig = (historical) => {
       },
     },
 
-    series: [{ name: 'installation', data: [43394, 55555, 213213] }],
+    series: historical,
 
     responsive: {
       rules: [

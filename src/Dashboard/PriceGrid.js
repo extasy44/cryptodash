@@ -16,13 +16,9 @@ const PriceGrid = () => {
 
   return (
     <PriceGridStyled>
-      {prices.length === 0 ? (
-        <div>Loading Prices ... </div>
-      ) : (
-        prices.map((price, index) => (
-          <PriceTile key={`priceTile-${index}`} index={index} price={price} />
-        ))
-      )}
+      {prices.map((price, index) => (
+        <PriceTile key={`priceTile-${index}`} index={index} price={price} />
+      ))}
     </PriceGridStyled>
   );
 };

@@ -33,6 +33,7 @@ const ControlButton = ({ name }) => {
     <ControlButtonElem
       active={state.page === name}
       onClick={() => dispatch({ type: 'page', payload: name })}
+      hidden={state.firstVisit && name === 'dashboard'}
     >
       {toProperCase(name)}
     </ControlButtonElem>
