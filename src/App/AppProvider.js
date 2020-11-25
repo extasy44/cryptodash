@@ -52,20 +52,15 @@ const AppProvider = ({ children }) => {
     if (state.firstVisit) return;
     let results = await historical();
 
-    let hisoricalResults = [
+    let historicalResults = [
       {
         name: state.currentFavorite,
-        data: results.map((ticker, index) => [
-          moment()
-            .subtract({ [state.timeInterval]: TIME_UNITS - index })
-            .valueOf(),
-          ticker.AUD,
-        ]),
+        data: results.map((ticker, index) => ticker.AUD),
       },
     ];
 
-    console.log(hisoricalResults);
-    dispatch({ type: 'histrorical', payload: hisoricalResults });
+    console.log(historicalResults);
+    dispatch({ type: 'historical', payload: historicalResults });
   };
 
   const historical = () => {
@@ -81,7 +76,6 @@ const AppProvider = ({ children }) => {
         )
       );
     }
-    console.log(promises);
 
     return Promise.all(promises);
   };
@@ -97,7 +91,6 @@ const AppProvider = ({ children }) => {
         console.warn('Fetch price error: ', e.message);
       }
     }
-    console.log(returnData);
     return returnData;
   };
 
@@ -119,7 +112,7 @@ const AppProvider = ({ children }) => {
 
   const setCurrentFavorite = (sym) => {
     dispatch({ type: 'currentFavorite', payload: sym });
-    dispatch({ type: 'historical', payload: null });
+    dispatch({ type: 'historical', payload: [] });
     fetchHistorical();
     localStorage.setItem(
       'cryptoDash',

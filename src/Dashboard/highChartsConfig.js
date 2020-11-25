@@ -1,5 +1,4 @@
 const highChartsConfig = (historical) => {
-  console.log(historical);
   return {
     title: {
       text: '',
