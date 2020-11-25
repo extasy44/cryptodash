@@ -55,7 +55,12 @@ const AppProvider = ({ children }) => {
     let historicalResults = [
       {
         name: state.currentFavorite,
-        data: results.map((ticker, index) => ticker.AUD),
+        data: results.map((ticker, index) => [
+          moment()
+            .subtract({ [state.timeInterval]: TIME_UNITS - index })
+            .valueOf(),
+          ticker.AUD,
+        ]),
       },
     ];
 
